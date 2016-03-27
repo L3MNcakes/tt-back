@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 )
@@ -64,4 +66,21 @@ func route(rout Router) func(http.ResponseWriter, *http.Request) {
 			http.NotFound(w, r)
 		}
 	}
+}
+
+type Request interface {
+	IsAuthorized() bool
+}
+
+type RequestImpl struct{}
+
+func (req *RequestImpl) IsAuthorized() bool {
+	return true
+}
+
+func DecodeRequest(req Request, body io.Reader) error {
+	dec := json.NewDecoder(body)
+	err := dec.Decode(&req)
+
+	return err
 }

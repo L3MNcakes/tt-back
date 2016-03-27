@@ -8,6 +8,7 @@ import (
 var app = &App{
 	Routes: []routes.Router{
 		&routes.DefaultRoute{},
+		&routes.UserRoute{},
 	},
 }
 
