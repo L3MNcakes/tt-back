@@ -1,0 +1,11 @@
+package main
+
+const RIAK_ADDRESSES []string = []string{
+	"127.0.0.1:32769",
+	"127.0.0.1:32771",
+	"127.0.0.1:32773",
+	"127.0.0.1:32783",
+	"127.0.0.1:32779",
+}
+
+const LISTEN_PORT string = "8080"
