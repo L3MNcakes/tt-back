@@ -1,13 +1,12 @@
 package main
 
 import (
-	"app/router"
 	riak "github.com/basho/riak-go-client"
 	"log"
 )
 
 type App struct {
-	Routes     []router.Router
+	Routes     []Router
 	riakClient *riak.Client
 }
 

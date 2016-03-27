@@ -1,25 +1,24 @@
 package main
 
 import (
-	"app/router"
 	"io"
 	"net/http"
 )
 
 var app = &App{
-	Routes: []router.Router{
+	Routes: []Router{
 		&DefaultRoute{},
 	},
 }
 
 func main() {
-	router.Routes(app.Routes)
+	Routes(app.Routes)
 
-	http.ListenAndServe(LISTEN_ADDR, nil)
+	http.ListenAndServe(LISTEN_HOST+":"+LISTEN_PORT, nil)
 }
 
 type DefaultRoute struct {
-	router.RouterImpl
+	RouterImpl
 }
 
 func (route *DefaultRoute) Path() string {
