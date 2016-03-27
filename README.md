@@ -1,3 +1,3 @@
 # tt-back
 
-test
+`go get github.com/l3mncakes/tt-back`
