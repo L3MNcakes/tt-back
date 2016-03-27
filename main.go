@@ -1,7 +1,6 @@
 package main
 
 import (
-	"io"
 	"net/http"
 )
 
@@ -15,16 +14,4 @@ func main() {
 	Routes(app.Routes)
 
 	http.ListenAndServe(":"+LISTEN_PORT, nil)
-}
-
-type DefaultRoute struct {
-	RouterImpl
-}
-
-func (route *DefaultRoute) Path() string {
-	return "/"
-}
-
-func (route *DefaultRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
-	io.WriteString(w, "Hello World!")
 }
