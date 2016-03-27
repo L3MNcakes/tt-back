@@ -11,6 +11,7 @@ ports.
 
 ```bash
 $ make build
+$ make test
 $ make start
 ```
 
