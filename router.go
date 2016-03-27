@@ -17,23 +17,23 @@ type Router interface {
 type RouterImpl struct{}
 
 func (router *RouterImpl) HandleGet(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "405: Method Not Allowed", 405)
+	http.Error(w, "405: Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
 func (route *RouterImpl) HandlePost(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "405: Method Not Allowed", 405)
+	http.Error(w, "405: Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
 func (route *RouterImpl) HandlePut(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "405: Method Not Allowed", 405)
+	http.Error(w, "405: Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
 func (route *RouterImpl) HandleDelete(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "405: Method Not Allowed", 405)
+	http.Error(w, "405: Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
 func (route *RouterImpl) HandlePatch(w http.ResponseWriter, r *http.Request) {
-	http.Error(w, "405: Method Not Allowed", 405)
+	http.Error(w, "405: Method Not Allowed", http.StatusMethodNotAllowed)
 }
 
 func Routes(routes []Router) {
