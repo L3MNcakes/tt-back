@@ -14,7 +14,7 @@ var app = &App{
 func main() {
 	Routes(app.Routes)
 
-	http.ListenAndServe(LISTEN_HOST+":"+LISTEN_PORT, nil)
+	http.ListenAndServe(":"+LISTEN_PORT, nil)
 }
 
 type DefaultRoute struct {

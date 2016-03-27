@@ -8,5 +8,4 @@ var RIAK_ADDRESSES []string = []string{
 	"127.0.0.1:32779",
 }
 
-const LISTEN_HOST string = "127.0.0.1"
 const LISTEN_PORT string = "8080"
