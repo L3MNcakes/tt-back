@@ -1,7 +1,10 @@
 package routes
 
 import (
+	"app/models"
 	"app/repositories"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -11,7 +14,19 @@ type UserRoute struct {
 }
 
 func (route *UserRoute) Path() string {
-	return "/users"
+	return "/user"
+}
+
+func (route *UserRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
+	repo := repositories.UserRepository{}
+	model, err := repo.Find("brandon")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	jval, _ := json.Marshal(model)
+	fmt.Fprintf(w, "%s", jval)
 }
 
 func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
@@ -22,9 +37,10 @@ func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	repo := repositories.UserRepository{}
-	model := repo.Model()
 
-	log.Println(model)
+	model := &models.UserModel{}
+	model.Username = req.Username
+	model.Password = req.Password
 
 	if err := repo.Save(model); err != nil {
 		log.Print(err)

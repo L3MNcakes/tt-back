@@ -71,7 +71,7 @@ func FetchModel(key string, repo Repository) (models.Model, error) {
 func SaveModel(model models.Model, repo Repository) error {
 	client := repo.Client()
 	bucket := repo.Bucket()
-	jval, _ := model.Json()
+	jval, _ := json.Marshal(model)
 
 	obj := &riak.Object{
 		Bucket:      bucket,
