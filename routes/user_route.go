@@ -17,18 +17,6 @@ func (route *UserRoute) Path() string {
 	return "/user"
 }
 
-func (route *UserRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
-	repo := repositories.UserRepository{}
-	model, err := repo.Find("brandon")
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	jval, _ := json.Marshal(model)
-	fmt.Fprintf(w, "%s", jval)
-}
-
 func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 	req := &PostUserRequest{}
 
