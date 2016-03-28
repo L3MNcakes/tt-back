@@ -6,3 +6,11 @@ type UserModel struct {
 	Password string     `json:"password"`
 	Token    TokenModel `json:"token"`
 }
+
+func (model *UserModel) Key() string {
+	return model.Username
+}
+
+func (model *UserModel) SetKey(key string) {
+	model.Username = key
+}

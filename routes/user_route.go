@@ -1,9 +1,7 @@
 package routes
 
 import (
-	"app/models"
-	"encoding/json"
-	"fmt"
+	"app/repositories"
 	"log"
 	"net/http"
 )
@@ -23,18 +21,14 @@ func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	model := &models.UserModel{
-		Username: req.Username,
-		Password: req.Password,
-	}
+	repo := repositories.UserRepository{}
+	model := repo.Model()
 
-	response, err := json.Marshal(model)
-	if err != nil {
+	log.Println(model)
+
+	if err := repo.Save(model); err != nil {
 		log.Print(err)
 	}
-
-	w.Header().Set("Content-Type", "application/json")
-	fmt.Fprintf(w, "%s", response)
 }
 
 type PostUserRequest struct {

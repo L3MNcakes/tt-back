@@ -1,19 +1,18 @@
 package main
 
 import (
+	"app/config"
 	"app/routes"
 	"net/http"
 )
 
-var app = &App{
-	Routes: []routes.Router{
+func main() {
+	app_routes := []routes.Router{
 		&routes.DefaultRoute{},
 		&routes.UserRoute{},
-	},
-}
+	}
 
-func main() {
-	routes.Routes(app.Routes)
+	routes.Routes(app_routes)
 
-	http.ListenAndServe(":"+LISTEN_PORT, nil)
+	http.ListenAndServe(":"+config.LISTEN_PORT, nil)
 }
