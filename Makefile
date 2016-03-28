@@ -1,4 +1,4 @@
-.PHONY: build start
+.PHONY: build start test
 
 build:
 	docker build -t tt-back .

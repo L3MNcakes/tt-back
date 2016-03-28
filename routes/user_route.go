@@ -3,8 +3,6 @@ package routes
 import (
 	"app/models"
 	"app/repositories"
-	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 )
