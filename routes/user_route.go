@@ -3,6 +3,8 @@ package routes
 import (
 	"app/models"
 	"app/repositories"
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
@@ -15,6 +17,27 @@ func (route *UserRoute) Path() string {
 	return "/user"
 }
 
+func (route *UserRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
+	repo := repositories.RiakRepositoryImpl{}
+	base_model := &models.UserModel{}
+
+	repo.SetModel(base_model)
+
+	model, err := repo.Find("brandon")
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	jval, err := json.Marshal(model)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	fmt.Fprintf(w, "%s", jval)
+}
+
 func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 	req := &PostUserRequest{}
 
@@ -22,13 +45,15 @@ func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 		log.Print(err)
 	}
 
-	repo := repositories.UserRepository{}
+	repo := repositories.RiakRepositoryImpl{}
 
 	model := &models.UserModel{}
 	model.Username = req.Username
 	model.Password = req.Password
 
-	if err := repo.Save(model); err != nil {
+	repo.SetModel(model)
+
+	if err := repo.Save(); err != nil {
 		log.Print(err)
 	}
 }

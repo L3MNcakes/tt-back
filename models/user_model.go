@@ -14,3 +14,7 @@ func (model *UserModel) Key() string {
 func (model *UserModel) SetKey(key string) {
 	model.Username = key
 }
+
+func (model *UserModel) Bucket() string {
+	return "users"
+}
