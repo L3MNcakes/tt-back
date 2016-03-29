@@ -4,6 +4,7 @@ type Model interface {
 	Key() string
 	SetKey(string)
 	Bucket() string
+	SecondaryIndexes() map[string]string
 }
 
 type ModelImpl struct {

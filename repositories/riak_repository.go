@@ -61,7 +61,6 @@ func (repo *RiakRepositoryImpl) Find(key string) error {
 
 	fcmd := cmd.(*riak.FetchValueCommand)
 	model := repo.model
-	model.SetKey(key)
 
 	if len(fcmd.Response.Values) > 0 {
 		if err := json.Unmarshal(fcmd.Response.Values[0].Value, &model); err != nil {
@@ -90,6 +89,10 @@ func (repo *RiakRepositoryImpl) Save() error {
 		Value:       jval,
 	}
 
+	for k, v := range repo.model.SecondaryIndexes() {
+		obj.AddToIndex(k, v)
+	}
+
 	cmd, err := riak.NewStoreValueCommandBuilder().
 		WithContent(obj).
 		WithReturnBody(true).
@@ -102,6 +105,38 @@ func (repo *RiakRepositoryImpl) Save() error {
 	if err := client.Execute(cmd); err != nil {
 		return err
 	}
+
+	return nil
+}
+
+func (repo *RiakRepositoryImpl) FindBySecondaryIndex(indx_name string, indx_val string) error {
+	client := repo.Client()
+	bucket := repo.model.Bucket()
+
+	cmd, err := riak.NewSecondaryIndexQueryCommandBuilder().
+		WithBucket(bucket).
+		WithIndexName(indx_name).
+		WithIndexKey(indx_val).
+		Build()
+
+	if err != nil {
+		return err
+	}
+
+	if err := client.Execute(cmd); err != nil {
+		return err
+	}
+
+	fcmd := cmd.(*riak.FetchValueCommand)
+	model := repo.model
+
+	if len(fcmd.Response.Values) > 0 {
+		if err := json.Unmarshal(fcmd.Response.Values[0].Value, &model); err != nil {
+			return err
+		}
+	}
+
+	repo.model = model
 
 	return nil
 }

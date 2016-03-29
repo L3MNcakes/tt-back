@@ -23,7 +23,7 @@ func (route *UserRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
 
 	repo.SetModel(base_model)
 
-	if err := repo.Find("brandon"); err != nil {
+	if err := repo.FindBySecondaryIndex("token_bin", "1234567890"); err != nil {
 		log.Print(err)
 	}
 
@@ -48,6 +48,11 @@ func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 	model := &models.UserModel{}
 	model.Username = req.Username
 	model.Password = req.Password
+
+	token := &models.TokenModel{}
+	token.AccessToken = "1234567890"
+
+	model.Token = token
 
 	repo.SetModel(model)
 
