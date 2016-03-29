@@ -8,7 +8,7 @@ import (
 type Repository interface {
 	Model() models.Model
 	SetModel(models.Model)
-	Find(string) (models.Model, error)
+	Find(string) error
 	Save() error
 }
 

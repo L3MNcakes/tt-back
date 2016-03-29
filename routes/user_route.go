@@ -23,13 +23,11 @@ func (route *UserRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
 
 	repo.SetModel(base_model)
 
-	model, err := repo.Find("brandon")
-
-	if err != nil {
+	if err := repo.Find("brandon"); err != nil {
 		log.Print(err)
 	}
 
-	jval, err := json.Marshal(model)
+	jval, err := json.Marshal(repo.Model())
 
 	if err != nil {
 		log.Print(err)

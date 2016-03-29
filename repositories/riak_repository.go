@@ -20,10 +20,6 @@ type RiakRepositoryImpl struct {
 	client *riak.Client
 }
 
-func (repo *RiakRepositoryImpl) Bucket() string {
-	return ""
-}
-
 func (repo *RiakRepositoryImpl) Client() *riak.Client {
 	if repo.client == nil {
 		opts := &riak.NewClientOptions{
@@ -45,7 +41,7 @@ func (repo *RiakRepositoryImpl) Model() models.Model {
 	return repo.model
 }
 
-func (repo *RiakRepositoryImpl) Find(key string) (models.Model, error) {
+func (repo *RiakRepositoryImpl) Find(key string) error {
 	client := repo.Client()
 	bucket := repo.model.Bucket()
 
@@ -56,11 +52,11 @@ func (repo *RiakRepositoryImpl) Find(key string) (models.Model, error) {
 		Build()
 
 	if err != nil {
-		return repo.model, err
+		return err
 	}
 
 	if err := client.Execute(cmd); err != nil {
-		return repo.model, err
+		return err
 	}
 
 	fcmd := cmd.(*riak.FetchValueCommand)
@@ -69,11 +65,13 @@ func (repo *RiakRepositoryImpl) Find(key string) (models.Model, error) {
 
 	if len(fcmd.Response.Values) > 0 {
 		if err := json.Unmarshal(fcmd.Response.Values[0].Value, &model); err != nil {
-			return model, err
+			return err
 		}
 	}
 
-	return model, nil
+	repo.model = model
+
+	return nil
 }
 
 func (repo *RiakRepositoryImpl) Save() error {
