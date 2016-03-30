@@ -59,6 +59,14 @@ func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 	if err := repo.Save(); err != nil {
 		log.Print(err)
 	}
+
+	jval, err := json.Marshal(model)
+
+	if err != nil {
+		log.Print(err)
+	}
+
+	fmt.Fprintf(w, "%s", jval)
 }
 
 type PostUserRequest struct {

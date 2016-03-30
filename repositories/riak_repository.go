@@ -127,16 +127,11 @@ func (repo *RiakRepositoryImpl) FindBySecondaryIndex(indx_name string, indx_val 
 		return err
 	}
 
-	fcmd := cmd.(*riak.FetchValueCommand)
-	model := repo.model
+	scmd := cmd.(*riak.SecondaryIndexQueryCommand)
 
-	if len(fcmd.Response.Values) > 0 {
-		if err := json.Unmarshal(fcmd.Response.Values[0].Value, &model); err != nil {
-			return err
-		}
+	if len(scmd.Response.Results) > 0 {
+		return repo.Find(string(scmd.Response.Results[0].ObjectKey))
 	}
-
-	repo.model = model
 
 	return nil
 }
