@@ -18,22 +18,28 @@ func (route *UserRoute) Path() string {
 }
 
 func (route *UserRoute) HandleGet(w http.ResponseWriter, r *http.Request) {
-	repo := repositories.RiakRepositoryImpl{}
-	base_model := &models.UserModel{}
+	query := r.URL.Query()
 
-	repo.SetModel(base_model)
+	if token, ok := query["accessToken"]; ok {
+		repo := repositories.RiakRepositoryImpl{}
+		base_model := &models.UserModel{}
 
-	if err := repo.FindBySecondaryIndex("token_bin", "1234567890"); err != nil {
-		log.Print(err)
+		repo.SetModel(base_model)
+
+		if err := repo.FindBySecondaryIndex("token_bin", token[0]); err != nil {
+			log.Print(err)
+		}
+
+		jval, err := json.Marshal(repo.Model())
+
+		if err != nil {
+			log.Print(err)
+		}
+
+		fmt.Fprintf(w, "%s", jval)
+	} else {
+		http.Error(w, "401: Unauthorized", http.StatusUnauthorized)
 	}
-
-	jval, err := json.Marshal(repo.Model())
-
-	if err != nil {
-		log.Print(err)
-	}
-
-	fmt.Fprintf(w, "%s", jval)
 }
 
 func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
@@ -48,11 +54,7 @@ func (route *UserRoute) HandlePost(w http.ResponseWriter, r *http.Request) {
 	model := &models.UserModel{}
 	model.Username = req.Username
 	model.Password = req.Password
-
-	token := &models.TokenModel{}
-	token.AccessToken = "1234567890"
-
-	model.Token = token
+	model.Token = models.GenerateToken()
 
 	repo.SetModel(model)
 

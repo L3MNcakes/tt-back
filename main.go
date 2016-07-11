@@ -7,6 +7,7 @@ import (
 )
 
 func main() {
+	// Initialize routes
 	app_routes := []routes.Router{
 		&routes.DefaultRoute{},
 		&routes.UserRoute{},
@@ -14,5 +15,6 @@ func main() {
 
 	routes.Routes(app_routes)
 
+	// Get served
 	http.ListenAndServe(":"+config.LISTEN_PORT, nil)
 }
